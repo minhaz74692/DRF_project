@@ -3,6 +3,10 @@ from .models import User
 from .serializers import UserSerializer
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+import io
+from rest_framework.parsers import JSONParser
+
 # Create your views here.
 
 #Queryset
@@ -24,7 +28,7 @@ def users_list(request):
 def user_info(request, pk): # Here pk means Primary Key
 
     #complex data
-    users = User.objects.get(user_id = pk)
+    users = User.objects.get(id = pk)
 
     #convert to python dictionary
     serializer = UserSerializer(users,)
@@ -35,3 +39,28 @@ def user_info(request, pk): # Here pk means Primary Key
     #json sent to user
     return HttpResponse(json_data, content_type = "application/json")
 
+#View for deserialization 
+@csrf_exempt
+def user_create(request):
+    if request.method == 'POST':
+        json_data = request.body
+
+        # JSON to Stream
+        stream = io.BytesIO(json_data)
+
+        # Streat to python
+        pythonData = JSONParser().parse(stream)
+
+        # Python to complex data
+        serializer = UserSerializer(data=pythonData)
+        if serializer.is_valid():
+            serializer.save()
+            res = {
+                "message": "Successfully inserted data"
+            }
+            js_data = JSONRenderer().render(res)
+            return HttpResponse(js_data, content_type = "application.json")
+        else:
+            js_data = JSONRenderer().render(serializer.errors)
+            return HttpResponse(js_data, content_type = "application.json")
+        
