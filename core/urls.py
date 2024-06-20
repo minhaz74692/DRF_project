@@ -23,5 +23,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('users/', views.users_list),
     path('users/<int:pk>', views.user_info),
-    path('users/create/', views.user_create),
+    path('users/create/', views.user_create, name="usercreate"),
 ]
