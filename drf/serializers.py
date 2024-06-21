@@ -12,9 +12,9 @@ class UserSerializer(serializers.Serializer):
         return User.objects.create(**validated_data)
     
     #De-Serialization
-    def update(self,instance, validated_data):
+    def update(self, instance, validated_data):
         instance.user_name = validated_data.get("user_name", instance.user_name)
         instance.age = validated_data.get("age", instance.age)
-        instance.professtion = validated_data.get("profession", instance.profession)
+        instance.profession = validated_data.get("profession", instance.profession)
         instance.save()
         return instance

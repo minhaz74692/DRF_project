@@ -76,7 +76,7 @@ def user_create(request):
         stream = io.BytesIO(json_data)
 
         #stream to python
-        pythonData = JSONParser.parse(stream)
+        pythonData = JSONParser().parse(stream)
 
         user_id = pythonData.get('user_id')
         user = User.objects.get(user_id = user_id)
