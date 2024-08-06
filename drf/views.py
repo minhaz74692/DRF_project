@@ -42,6 +42,7 @@ def user_info(request, pk): # Here pk means Primary Key
 #View for deserialization 
 @csrf_exempt
 def user_create(request):
+    
     if request.method == 'POST':
         json_data = request.body
 
